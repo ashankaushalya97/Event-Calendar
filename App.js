@@ -32,6 +32,33 @@ import TimelineCal from './screens/timelineCalendar';
 
 
 const App: () => React$Node = () => {
+	const [isSigned, setIsSigned] = useState<boolean>(false);
+    const token = useSelector(authTokenSelector);
+    const history = useHistory();
+
+    useEffect(() => {
+        try {
+            const notExpired = checkTokenExpiry(token);
+            setIsSigned(notExpired);
+            
+            if(!notExpired) {
+                store.dispatch(authLogoutWithMiddlewareMount());
+                store.dispatch(addAlertWithTimeout({
+                        id: generateUUID(),
+                        severity: "error" as AlertSeverity,
+                        type: AlertType.SNACKBAR,
+                        message: "Session expired!",
+                    }
+                ))
+                history.push(routes.LOGIN);
+            }
+        }
+        catch(e) {
+            history.push(routes.LOGIN);
+        }
+       
+    }, [token, history]);
+
   return (
     <>
      <AgendaScreen/>
