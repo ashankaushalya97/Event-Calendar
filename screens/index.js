@@ -1,5 +1,4 @@
 import {Navigation} from 'react-native-navigation';
-
 import MenuScreen from './menu';
 import CalendarsScreen from './calendars';
 import AgendaScreen from './agenda';
